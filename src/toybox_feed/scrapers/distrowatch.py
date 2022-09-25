@@ -34,20 +34,20 @@ class TorrentArchiveScraper:
         resp.close()
 
         tag_td_torrent = resp_soup.find_all("td", class_="torrent")
-        tag_td_torrentdate = resp_soup.find_all("td", class_="torrentdate")
-        tag_td_torrentdate = [f"{tag.text}".strip() for tag in tag_td_torrentdate]
-        raw_data: list[RawDistroData] = list(
-            zip(
-                [f"{tag.text}".strip() for tag in tag_td_torrent[::2]],
-                [
-                    (
-                        f"{tag.a.text}".strip(),
-                        f"{TorrentArchiveScraper.START_URL}{tag.a['href']}".strip(),
-                        date,
-                    )
-                    for tag, date in zip(tag_td_torrent[1::2], tag_td_torrentdate)
-                ],
-            )
+        tag_td_torrentdate = [
+            f"{tag.text}".strip()
+            for tag in resp_soup.find_all("td", class_="torrentdate")
+        ]
+        raw_data: zip[RawDistroData] = zip(
+            [f"{tag.text}".strip() for tag in tag_td_torrent[::2]],
+            [
+                (
+                    f"{tag.a.text}".strip(),
+                    f"{TorrentArchiveScraper.START_URL}{tag.a['href']}".strip(),
+                    date,
+                )
+                for tag, date in zip(tag_td_torrent[1::2], tag_td_torrentdate)
+            ],
         )
 
         for data in raw_data:
