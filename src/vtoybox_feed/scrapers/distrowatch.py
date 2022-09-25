@@ -60,6 +60,9 @@ class TorrentArchiveScraper:
                 # print(repr(e))
         # print(raw_data[:2], sep="\n")
 
+    def get(self) -> dict[str, list[TorrentData]]:
+        return self.feed
+
 
 if __name__ == "__main__":
     from yaspin import yaspin
