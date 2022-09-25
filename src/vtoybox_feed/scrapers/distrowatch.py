@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
 import requests
-from yaspin import yaspin
 
 # from torrentool.api import Torrent
 # from enum import Enum
@@ -61,6 +60,10 @@ class TorrentArchiveScraper:
 
 
 if __name__ == "__main__":
+    from yaspin import yaspin
+    from pprint import PrettyPrinter
+
     with yaspin(color="cyan") as spinner:
-        TorrentArchiveScraper()
+        scraped = TorrentArchiveScraper()
         spinner.ok("✅ ")
+    PrettyPrinter().pprint(list(scraped.feed.values())[0])  # sample check
