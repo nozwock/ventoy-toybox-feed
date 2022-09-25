@@ -51,13 +51,11 @@ class TorrentArchiveScraper:
         )
 
         for data in raw_data:
-            try:
-                self.feed[data[0]].append(
-                    {"name": data[1][0], "torrent_url": data[1][1], "date": data[1][2]}
-                )
-            except KeyError:
+            if self.feed.get(data[0]) is None:
                 self.feed[data[0]] = []
-                # print(repr(e))
+            self.feed[data[0]].append(
+                {"name": data[1][0], "torrent_url": data[1][1], "date": data[1][2]}
+            )
         # print(raw_data[:2], sep="\n")
 
     def get(self) -> dict[str, list[TorrentData]]:
