@@ -63,10 +63,8 @@ class TorrentArchiveScraper:
 
 
 if __name__ == "__main__":
-    from yaspin import yaspin
     from pprint import PrettyPrinter
 
-    with yaspin(color="cyan") as spinner:
-        scraped = TorrentArchiveScraper()
-        spinner.ok("✅ ")
-    PrettyPrinter().pprint(list(scraped.feed.values())[0])  # sample check
+    # NOTE: pipe the script output with something like `less`
+    # since the output is going to be lengthy
+    PrettyPrinter().pprint(TorrentArchiveScraper().feed)
