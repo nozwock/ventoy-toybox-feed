@@ -16,7 +16,7 @@ class TorrentArchiveScraper:
 
     START_URL = "https://www.distrowatch.com/"
     URL = "https://distrowatch.com/dwres.php?resource=bittorrent&sortorder=date"
-    data: dict[str, list[TorrentData]] = {}
+    feed: dict[str, list[TorrentData]] = {}
     """
     { 
         "DistroName": [
@@ -48,6 +48,15 @@ class TorrentArchiveScraper:
                 ],
             )
         )
+
+        for data in raw_data:
+            try:
+                TorrentArchiveScraper.feed[data[0]].append(
+                    {"name": data[1][0], "torrent_url": data[1][1], "date": data[1][2]}
+                )
+            except KeyError:
+                TorrentArchiveScraper.feed[data[0]] = []
+                # print(repr(e))
         # print(raw_data[:2], sep="\n")
 
 
