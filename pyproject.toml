@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["nozwock <57829219+nozwock@users.noreply.github.com>"]
 readme = "README.md"
-packages = [{ include = "vtoybox_feed", from = "src" }]
+packages = [{ include = "toybox_feed", from = "src" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
