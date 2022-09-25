@@ -14,6 +14,7 @@ lxml = "^4.9.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.8.0"
+yaspin = "^2.2.0"
 
 [build-system]
 requires = ["poetry-core"]
