@@ -2,7 +2,6 @@ from bs4 import BeautifulSoup
 import requests
 
 # from torrentool.api import Torrent
-# from enum import Enum
 
 TorrentData = dict[str, str]
 # {"name": str, "torrent_url": str, "magnet": str, "date": str}
@@ -17,7 +16,7 @@ class TorrentArchiveScraper:
     URL = "https://distrowatch.com/dwres.php?resource=bittorrent&sortorder=date"
 
     def __init__(self) -> None:
-        self.feed: dict[str, list[TorrentData]] = {}
+        feed: dict[str, list[TorrentData]] = {}
         """
         This is the parsed data.\n
         { 
@@ -30,36 +29,39 @@ class TorrentArchiveScraper:
         """
 
         resp = requests.get(TorrentArchiveScraper.URL)
-        resp_soup = BeautifulSoup(resp.text, "lxml")
+        soup = BeautifulSoup(resp.text, "lxml")
         resp.close()
 
-        tag_td_torrent = resp_soup.find_all("td", class_="torrent")
-        tag_td_torrentdate = [
-            f"{tag.text}".strip()
-            for tag in resp_soup.find_all("td", class_="torrentdate")
+        torrent_data = soup.find_all("td", class_="torrent")
+        release_date = [
+            f"{tag.text}".strip() for tag in soup.find_all("td", class_="torrentdate")
         ]
-        raw_data: zip[RawDistroData] = zip(
-            [f"{tag.text}".strip() for tag in tag_td_torrent[::2]],
+        raw_feed: zip[RawDistroData] = zip(
+            [f"{tag.text}".strip() for tag in torrent_data[::2]],
             [
                 (
                     f"{tag.a.text}".strip(),
                     f"{TorrentArchiveScraper.START_URL}{tag.a['href']}".strip(),
                     date,
                 )
-                for tag, date in zip(tag_td_torrent[1::2], tag_td_torrentdate)
+                for tag, date in zip(torrent_data[1::2], release_date)
             ],
         )
 
-        for data in raw_data:
-            if self.feed.get(data[0]) is None:
-                self.feed[data[0]] = []
-            self.feed[data[0]].append(
-                {"name": data[1][0], "torrent_url": data[1][1], "date": data[1][2]}
+        for dist_data in raw_feed:
+            if feed.get(dist_data[0]) is None:
+                feed[dist_data[0]] = []
+            feed[dist_data[0]].append(
+                {
+                    "name": dist_data[1][0],
+                    "torrent_url": dist_data[1][1],
+                    "date": dist_data[1][2],
+                }
             )
-        # print(raw_data[:2], sep="\n")
 
-    def get(self) -> dict[str, list[TorrentData]]:
-        return self.feed
+        # exposing access to the parsed data
+        self.get = feed
+        """returns parsed data as a dict"""
 
 
 if __name__ == "__main__":
@@ -67,4 +69,4 @@ if __name__ == "__main__":
 
     # NOTE: pipe the script output with something like `less`
     # since the output is going to be lengthy
-    PrettyPrinter().pprint(TorrentArchiveScraper().feed)
+    PrettyPrinter().pprint(TorrentArchiveScraper().get)

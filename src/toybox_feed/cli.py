@@ -15,5 +15,5 @@ if __name__ == "__main__":
 
     with open(Path(args.output), "w") as f:
         start_time = timeit.default_timer()
-        json.dump(distrowatch.TorrentArchiveScraper().feed, f)
+        json.dump(distrowatch.TorrentArchiveScraper().get, f)
         print(f"Done! took {timeit.default_timer() - start_time}s")
