@@ -38,11 +38,11 @@ class TorrentArchiveScraper:
         tag_td_torrentdate = [f"{tag.text}".strip() for tag in tag_td_torrentdate]
         raw_data: list[RawDistroData] = list(
             zip(
-                [f"{tag.text}" for tag in tag_td_torrent[::2]],
+                [f"{tag.text}".strip() for tag in tag_td_torrent[::2]],
                 [
                     (
-                        f"{tag.a.text}".removesuffix(".torrent"),
-                        f"{TorrentArchiveScraper.START_URL}{tag.a['href']}",
+                        f"{tag.a.text}".strip(),
+                        f"{TorrentArchiveScraper.START_URL}{tag.a['href']}".strip(),
                         date,
                     )
                     for tag, date in zip(tag_td_torrent[1::2], tag_td_torrentdate)
