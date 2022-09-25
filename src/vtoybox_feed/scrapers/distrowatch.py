@@ -15,18 +15,20 @@ class TorrentArchiveScraper:
 
     START_URL = "https://www.distrowatch.com/"
     URL = "https://distrowatch.com/dwres.php?resource=bittorrent&sortorder=date"
-    feed: dict[str, list[TorrentData]] = {}
-    """
-    { 
-        "DistroName": [
-            {"name": str, "torrent_link": str, "magnet": str, "date": str},
-            ...
-            ],
-        ...
-    }
-    """
 
     def __init__(self) -> None:
+        self.feed: dict[str, list[TorrentData]] = {}
+        """
+        This is the parsed data.\n
+        { 
+            "DistroName": [
+                {"name": str, "torrent_url": str, "magnet": str, "date": str},
+                ...
+                ],
+            ...
+        }
+        """
+
         resp = requests.get(TorrentArchiveScraper.URL)
         resp_soup = BeautifulSoup(resp.text, "lxml")
         resp.close()
@@ -50,11 +52,11 @@ class TorrentArchiveScraper:
 
         for data in raw_data:
             try:
-                TorrentArchiveScraper.feed[data[0]].append(
+                self.feed[data[0]].append(
                     {"name": data[1][0], "torrent_url": data[1][1], "date": data[1][2]}
                 )
             except KeyError:
-                TorrentArchiveScraper.feed[data[0]] = []
+                self.feed[data[0]] = []
                 # print(repr(e))
         # print(raw_data[:2], sep="\n")
 
