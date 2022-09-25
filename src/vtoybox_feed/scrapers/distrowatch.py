@@ -5,7 +5,7 @@ import requests
 # from enum import Enum
 
 TorrentData = dict[str, str]
-# {"name": str, "torrent_link": str, "magnet": str, "date": str}
+# {"name": str, "torrent_url": str, "magnet": str, "date": str}
 RawDistroData = tuple[str, tuple]
 # (DistroName, RawTorrentData)
 
