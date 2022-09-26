@@ -32,9 +32,14 @@ class TorrentArchiveScraper:
         soup = BeautifulSoup(resp.text, "lxml")
         resp.close()
 
-        torrent_data = soup.find_all("td", class_="torrent")
+        news_feed = soup.find("td", class_="News1").blockquote  # type: ignore
+        if news_feed is None:
+            raise
+
+        torrent_data = news_feed.find_all("td", class_="torrent")
         release_date = [
-            f"{tag.text}".strip() for tag in soup.find_all("td", class_="torrentdate")
+            f"{tag.text}".strip()
+            for tag in news_feed.find_all("td", class_="torrentdate")
         ]
         raw_feed: zip[RawDistroData] = zip(
             [f"{tag.text}".strip() for tag in torrent_data[::2]],
@@ -48,14 +53,14 @@ class TorrentArchiveScraper:
             ],
         )
 
-        for dist_data in raw_feed:
-            if feed.get(dist_data[0]) is None:
-                feed[dist_data[0]] = []
-            feed[dist_data[0]].append(
+        for distro_data in raw_feed:
+            if feed.get(distro_data[0]) is None:
+                feed[distro_data[0]] = []
+            feed[distro_data[0]].append(
                 {
-                    "name": dist_data[1][0],
-                    "torrent_url": dist_data[1][1],
-                    "date": dist_data[1][2],
+                    "name": distro_data[1][0],
+                    "torrent_url": distro_data[1][1],
+                    "date": distro_data[1][2],
                 }
             )
 
