@@ -165,6 +165,14 @@ optional = false
 python-versions = ">=3.7"
 
 [[package]]
+name = "torrentool"
+version = "1.1.1"
+description = "The tool to work with torrent files."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "urllib3"
 version = "1.26.12"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
@@ -191,7 +199,7 @@ termcolor-whl = "1.1.2"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "387ba7bf7801670ba4281379e42eb2879fa7fd8c4f4208bb075324c70aa54b0c"
+content-hash = "c6aff388d84012128a3632c73214470d2a638f1be81c621a0b86e9e2ad438a1f"
 
 [metadata.files]
 beautifulsoup4 = [
@@ -341,6 +349,10 @@ termcolor-whl = [
 tomli = [
     {file = "tomli-2.0.1-py3-none-any.whl", hash = "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc"},
     {file = "tomli-2.0.1.tar.gz", hash = "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"},
+]
+torrentool = [
+    {file = "torrentool-1.1.1-py2.py3-none-any.whl", hash = "sha256:11e647c4f40c14b7e9d6087602b2a91b54743a6ad0e6cc41904b196e975f0d56"},
+    {file = "torrentool-1.1.1.tar.gz", hash = "sha256:2d892e8a02749fa9ea57fb2dcf69c1794305c069e973f4726a0a51dc66283e9c"},
 ]
 urllib3 = [
     {file = "urllib3-1.26.12-py2.py3-none-any.whl", hash = "sha256:b930dd878d5a8afb066a637fbb35144fe7901e3b209d1cd4f524bd0e9deee997"},
