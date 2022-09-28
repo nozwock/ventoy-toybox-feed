@@ -2,12 +2,12 @@ import json
 from pathlib import Path
 from argparse import ArgumentParser
 from .scrapers import distrowatch
-import timeit
+from timeit import default_timer as timer
 
-DEFAULT_JSON = "feed.json"
+DEFAULT_JSON = "feeds.json"
 
 
-def run():
+def run() -> None:
     parser = ArgumentParser()
     parser.add_argument(
         "-o", "--output", type=str, default=DEFAULT_JSON, metavar="FILE"
@@ -15,9 +15,9 @@ def run():
     args = parser.parse_args()
 
     with open(Path(args.output), "w") as f:
-        start_time = timeit.default_timer()
-        json.dump(distrowatch.TorrentArchiveScraper().get, f)
-        print(f"Done! took {timeit.default_timer() - start_time}s")
+        start_time = timer()
+        json.dump(distrowatch.TorrentArchiveScraper().get_feed, f)
+        print(f"Done! took {timer() - start_time}s")
 
 
 if __name__ == "__main__":

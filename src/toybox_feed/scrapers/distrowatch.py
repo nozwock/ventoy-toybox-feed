@@ -65,7 +65,7 @@ class TorrentArchiveScraper:
             )
 
         # exposing access to the parsed data
-        self.get = feed
+        self.get_feed = feed
         """returns parsed data as a dict"""
 
 
@@ -74,4 +74,4 @@ if __name__ == "__main__":
 
     # NOTE: pipe the script output with something like `less`
     # since the output is going to be lengthy
-    PrettyPrinter().pprint(TorrentArchiveScraper().get)
+    PrettyPrinter().pprint(TorrentArchiveScraper().get_feed)
