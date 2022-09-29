@@ -4,7 +4,7 @@ from pathlib import Path
 RESPONSE_OK = 200
 
 
-def download(url: str, dir: str | Path = "", **kwargs) -> bool:
+def download_file(url: str, dir: str | Path = "", **kwargs) -> bool:
     """
     True on successful download else False.\n
     **kwargs are passed to requests.get()
@@ -26,6 +26,7 @@ if __name__ == "__main__":
     ##############
     # DEBUG TEST #
     ##############
+    # import json
     import logging
     from rich.logging import RichHandler
     from timeit import default_timer as timer
@@ -38,11 +39,18 @@ if __name__ == "__main__":
     )
     log = logging.getLogger(__name__)
 
-    url = (
-        "https://www.seoclerk.com/pics/000/923/517/6fe74b36d8230c6581e866362fb435e0.jpg"
-    )
+    # url = (
+    #     "https://www.seoclerk.com/pics/000/923/517/6fe74b36d8230c6581e866362fb435e0.jpg"
+    # )
+    # download_file(url)
 
-    start_time = timer()
-    download(url)
-    log.info(f"{url}")
-    log.info(f"took {timer() - start_time}s")
+    # with open("feed.json", "r") as f:
+    #     feed = json.load(f)
+    # urls = []
+    # for v in feed.values():
+    #     urls.append(v[0]["torrent_url"])
+    # start_time = timer()
+    # for url in urls:
+    #     download_file(url, "./torrents-files")
+    #     log.info(f"{url}")
+    # log.info(f"took {timer() - start_time}s")
