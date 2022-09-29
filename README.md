@@ -30,8 +30,6 @@ For e.g. this is how the scraped data is structured in a JSON format:-
 }
 ```
 
-# Developer Environment
-
 > System Requirements > [Python](https://www.python.org/downloads/), [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git/)
 
 ## Initializing virtual environment
