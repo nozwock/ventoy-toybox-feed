@@ -1,6 +1,8 @@
 import tempfile
 from pathlib import Path
 
+import aiohttp
+
 from toybox_feed.scrapers.distrowatch import TorrentData
 from toybox_feed.utils.dl import download_many
 from toybox_feed.utils.torrent import get_magnet_link
@@ -17,10 +19,13 @@ def add_magnet_links_to_feeds(
             if url is not None:
                 urls.append(url)
 
+    connector = aiohttp.TCPConnector(force_close=True)
+    # can't reuse same tcp connections, distrowatch disconnects otherwise.
+
     map = get_filename_and_feeds_relation(feeds)
     with tempfile.TemporaryDirectory() as tmpdir:
         tmpdir = Path(tmpdir)
-        download_many(urls, tmpdir)
+        download_many(urls, tmpdir, connector=connector)
 
         for distro_name in map.keys():
             for fname_index_pair in map[distro_name]:
