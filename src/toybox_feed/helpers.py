@@ -1,8 +1,9 @@
+import tempfile
+from pathlib import Path
+
 from toybox_feed.scrapers.distrowatch import TorrentData
 from toybox_feed.utils.dl import download_many
 from toybox_feed.utils.torrent import get_magnet_link
-import tempfile
-from pathlib import Path
 
 
 def add_magnet_links_to_feeds(
@@ -23,15 +24,22 @@ def add_magnet_links_to_feeds(
 
     #     for distro_name in map.keys():
     #         for fname_index_pair in map[distro_name]:
-    #             magnet_link = get_magnet_link(tmpdir.joinpath(fname_index_pair[0]))
-    #             feeds[distro_name][fname_index_pair[1]]["magnet"] = magnet_link
+    #             magnet_link: str | None = get_magnet_link(
+    #                 tmpdir.joinpath(fname_index_pair[0])
+    #             )
+    #             feeds[distro_name][fname_index_pair[1]]["magnet"] = magnet_link  # type: ignore
 
-    tmpdir = Path("./src/torrents-files")
+    tmpdir = Path("./test_async_download")
+    # download_many(urls, tmpdir)
 
     for distro_name in map.keys():
         for fname_index_pair in map[distro_name]:
-            magnet_link = get_magnet_link(tmpdir.joinpath(fname_index_pair[0]))
-            feeds[distro_name][fname_index_pair[1]]["magnet"] = magnet_link
+            # print(fname_index_pair[0])
+            # print(tmpdir.joinpath(fname_index_pair[0]))
+            magnet_link: str | None = get_magnet_link(
+                tmpdir.joinpath(fname_index_pair[0])
+            )
+            feeds[distro_name][fname_index_pair[1]]["magnet"] = magnet_link  # type: ignore
 
     return feeds
 
