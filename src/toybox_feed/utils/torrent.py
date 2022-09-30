@@ -3,9 +3,9 @@ from pathlib import Path
 import urllib
 
 
-def get_magnet_link(file_path: str | Path) -> str:
-    torrent_file = Torrent.from_file(file_path)
-    paramstr = urllib.parse.urlencode(
+def get_magnet_link(filepath: str | Path) -> str:
+    torrent_file = Torrent.from_file(filepath)
+    paramstr = urllib.parse.urlencode(  # type: ignore
         {
             "xt": torrent_file.magnet_link.split("?xt=")[-1],
             "dn": torrent_file.name,
