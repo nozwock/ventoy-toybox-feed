@@ -29,7 +29,7 @@ def test_async_download() -> None:
         "[bold green]Finished scraping feeds[/bold green]", extra={"markup": True}
     )
 
-    with open("feeds.json", "w") as f:
+    with open("base_feeds.json", "w") as f:
         json.dump(feed, f)
 
     urls = []
