@@ -18,28 +18,29 @@ def add_magnet_links_to_feeds(
             urls.append(url)
 
     map = get_filename_and_feeds_relation(feeds)
-    # with tempfile.TemporaryDirectory() as tmpdir:
-    #     tmpdir = Path(tmpdir)
-    #     download_many(urls, tmpdir)
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmpdir = Path(tmpdir)
+        download_many(urls, tmpdir)
 
-    #     for distro_name in map.keys():
-    #         for fname_index_pair in map[distro_name]:
-    #             magnet_link: str | None = get_magnet_link(
-    #                 tmpdir.joinpath(fname_index_pair[0])
-    #             )
-    #             feeds[distro_name][fname_index_pair[1]]["magnet"] = magnet_link  # type: ignore
+        for distro_name in map.keys():
+            for fname_index_pair in map[distro_name]:
+                magnet_link: str | None = get_magnet_link(
+                    tmpdir.joinpath(fname_index_pair[0])
+                )
+                feeds[distro_name][fname_index_pair[1]]["magnet"] = magnet_link  # type: ignore
 
-    tmpdir = Path("./test_async_download")
-    # download_many(urls, tmpdir)
+    # OFFLINE DEBUGGING (to not stress the website)
+    # tmpdir = Path("./test_async_download")
+    # # download_many(urls, tmpdir)
 
-    for distro_name in map.keys():
-        for fname_index_pair in map[distro_name]:
-            # print(fname_index_pair[0])
-            # print(tmpdir.joinpath(fname_index_pair[0]))
-            magnet_link: str | None = get_magnet_link(
-                tmpdir.joinpath(fname_index_pair[0])
-            )
-            feeds[distro_name][fname_index_pair[1]]["magnet"] = magnet_link  # type: ignore
+    # for distro_name in map.keys():
+    #     for fname_index_pair in map[distro_name]:
+    #         # print(fname_index_pair[0])
+    #         # print(tmpdir.joinpath(fname_index_pair[0]))
+    #         magnet_link: str | None = get_magnet_link(
+    #             tmpdir.joinpath(fname_index_pair[0])
+    #         )
+    #         feeds[distro_name][fname_index_pair[1]]["magnet"] = magnet_link  # type: ignore
 
     return feeds
 
