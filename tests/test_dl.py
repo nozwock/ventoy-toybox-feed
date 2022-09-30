@@ -72,10 +72,11 @@ def download_many(
 def test_async_download() -> None:
     feed = TorrentArchiveScraper().get_feed
     urls = []
-    for v in feed.values():
-        url = v[0].get("torrent_url")
-        if url is not None:
-            urls.append(url)
+    for torrent_items in feed.values():
+        for item in torrent_items:
+            url = item.get("torrent_url")
+            if url is not None:
+                urls.append(url)
 
     start_time = timer()
     download_many(urls, "./test_async_download")
