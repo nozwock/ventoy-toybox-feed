@@ -3,7 +3,8 @@ from argparse import ArgumentParser
 from pathlib import Path
 from timeit import default_timer as timer
 
-from .scrapers import distrowatch
+from toybox_feed.helpers import add_magnet_links_to_feeds
+from toybox_feed.scrapers import distrowatch
 
 DEFAULT_JSON = "feeds.json"
 
@@ -17,7 +18,8 @@ def run() -> None:
 
     with open(Path(args.output), "w") as f:
         start_time = timer()
-        json.dump(distrowatch.TorrentArchiveScraper().get_feed, f)
+        feeds = add_magnet_links_to_feeds(distrowatch.TorrentArchiveScraper().get_feed)
+        json.dump(feeds, f)
         print(f"Done! took {timer() - start_time}s")
 
 
