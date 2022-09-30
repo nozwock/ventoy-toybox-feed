@@ -11,10 +11,11 @@ def add_magnet_links_to_feeds(
 ) -> dict[str, list[TorrentData]]:
 
     urls = []
-    for v in feeds.values():
-        url = v[0].get("torrent_url")
-        if url is not None:
-            urls.append(url)
+    for torrent_items in feeds.values():
+        for item in torrent_items:
+            url = item.get("torrent_url")
+            if url is not None:
+                urls.append(url)
 
     map = get_filename_and_feeds_relation(feeds)
     with tempfile.TemporaryDirectory() as tmpdir:
