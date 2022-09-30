@@ -10,7 +10,6 @@ def add_magnet_links_to_feeds(
     feeds: dict[str, list[TorrentData]]
 ) -> dict[str, list[TorrentData]]:
 
-    magnet_links = []
     urls = []
     for v in feeds.values():
         url = v[0].get("torrent_url")
