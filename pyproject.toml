@@ -2,7 +2,10 @@
 name = "ventoy-toybox-feed"
 version = "22.10.26"
 description = ""
-authors = ["nozwock <57829219+nozwock@users.noreply.github.com>"]
+authors = [
+  "nozwock <57829219+nozwock@users.noreply.github.com>",
+  "Rishab Raj <114160922+dedproxy@users.noreply.github.com>",
+]
 readme = "README.md"
 packages = [{ include = "toybox_feed", from = "src" }]
 
