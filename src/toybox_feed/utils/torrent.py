@@ -1,6 +1,7 @@
-from torrentool.api import Torrent
-from pathlib import Path
 import urllib
+from pathlib import Path
+
+from torrentool.api import Torrent
 
 
 def get_magnet_link(filepath: str | Path) -> str:

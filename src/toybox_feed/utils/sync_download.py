@@ -1,6 +1,9 @@
-import requests
+# DEPRECATED
+
 from pathlib import Path
 from typing import Any
+
+import requests
 
 RESPONSE_OK = 200
 Response = int
@@ -29,8 +32,10 @@ if __name__ == "__main__":
     ##############
     # import json
     import logging
-    from rich.logging import RichHandler
     from timeit import default_timer as timer
+
+    from rich.logging import RichHandler
+
     from ..scrapers import distrowatch
 
     logging.basicConfig(

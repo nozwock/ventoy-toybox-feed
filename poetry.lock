@@ -180,6 +180,20 @@ optional = false
 python-versions = ">=3.5"
 
 [[package]]
+name = "isort"
+version = "5.10.1"
+description = "A Python utility / library to sort Python imports."
+category = "dev"
+optional = false
+python-versions = ">=3.6.1,<4.0"
+
+[package.extras]
+colors = ["colorama (>=0.4.3,<0.5.0)"]
+pipfile_deprecated_finder = ["pipreqs", "requirementslib"]
+plugins = ["setuptools"]
+requirements_deprecated_finder = ["pip-api", "pipreqs"]
+
+[[package]]
 name = "lxml"
 version = "4.9.1"
 description = "Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API."
@@ -344,7 +358,7 @@ termcolor-whl = "1.1.2"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "a06156429812b030fa38703ab09f751f76e2bd50649192f979e4d9332752e366"
+content-hash = "d784bd3e2862ed2794b8094543b5eb33d9f85dca9f5bf1f35bcf449942d45f88"
 
 [metadata.files]
 aiofiles = [
@@ -575,6 +589,10 @@ frozenlist = [
 idna = [
     {file = "idna-3.4-py3-none-any.whl", hash = "sha256:90b77e79eaa3eba6de819a0c442c0b4ceefc341a7a2ab77d7562bf49f425c5c2"},
     {file = "idna-3.4.tar.gz", hash = "sha256:814f528e8dead7d329833b91c5faa87d60bf71824cd12a7530b5526063d02cb4"},
+]
+isort = [
+    {file = "isort-5.10.1-py3-none-any.whl", hash = "sha256:6f62d78e2f89b4500b080fe3a81690850cd254227f27f75c3a0c491a1f351ba7"},
+    {file = "isort-5.10.1.tar.gz", hash = "sha256:e8443a5e7a020e9d7f97f1d7d9cd17c88bcb3bc7e218bf9cf5095fe550be2951"},
 ]
 lxml = [
     {file = "lxml-4.9.1-cp27-cp27m-macosx_10_15_x86_64.whl", hash = "sha256:98cafc618614d72b02185ac583c6f7796202062c41d2eeecdf07820bad3295ed"},

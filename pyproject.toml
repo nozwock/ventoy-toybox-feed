@@ -21,6 +21,28 @@ aiolimiter = "^1.0.0"
 black = "^22.8.0"
 yaspin = "^2.2.0"
 rich = "^12.5.1"
+isort = "^5.10.1"
+
+[tool.black]
+# line-length = 79
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
 
 [build-system]
 requires = ["poetry-core"]

@@ -1,10 +1,12 @@
+# DEPRECATED
+
 import asyncio
-import aiohttp
-import aiofiles
-import aiolimiter
 from pathlib import Path
 from typing import Any
 
+import aiofiles
+import aiohttp
+import aiolimiter
 
 USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64)"
 Responses = list[int]
@@ -60,8 +62,10 @@ if __name__ == "__main__":
     ###############
     import json
     import logging
-    from rich.logging import RichHandler
     from timeit import default_timer as timer
+
+    from rich.logging import RichHandler
+
     from ..scrapers import distrowatch
 
     logger = logging.getLogger(__name__)

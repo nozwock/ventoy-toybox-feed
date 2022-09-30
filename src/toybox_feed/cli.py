@@ -1,8 +1,9 @@
 import json
-from pathlib import Path
 from argparse import ArgumentParser
-from .scrapers import distrowatch
+from pathlib import Path
 from timeit import default_timer as timer
+
+from .scrapers import distrowatch
 
 DEFAULT_JSON = "feeds.json"
 
