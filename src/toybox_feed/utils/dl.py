@@ -1,4 +1,5 @@
 import asyncio
+import logging
 from pathlib import Path
 from typing import Any
 
@@ -6,12 +7,22 @@ import aiofiles
 import aiohttp
 import aiolimiter
 import requests
+from rich.logging import RichHandler
 
 RESPONSE_OK = 200
 USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64)"
 
 Response = int
 Responses = list[int]
+
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(
+    level=logging.INFO,
+    format=f"%(message)s",
+    datefmt="%H:%M:%S",
+    handlers=[RichHandler()],
+)
 
 
 def download(url: str, dir: str | Path = "", **kwargs: Any) -> Response:
@@ -53,17 +64,17 @@ def download_many(
         filename = url.split("/")[-1]
         await semaphore.acquire()
         async with limiter:
-            # logger.info(f"Begin downloading {url}")
+            logger.info(f"Begin downloading {url}")
             async with session.get(url) as response:
-                # logger.info(f"Received response {response.status}")
+                logger.info(f"Received response {response.status}")
                 responses.append(response.status)
                 if response.status == RESPONSE_OK:
                     f = await aiofiles.open(dir.joinpath(filename), "wb")
                     await f.write(await response.read())
-                    # logger.info(f"Finished downloading {url}")
+                    logger.info(f"Finished downloading {url}")
                     await f.close()
-                # else:
-                # logger.error(f"Failed to download {url}")
+                else:
+                    logger.error(f"Failed to download {url}")
                 semaphore.release()
 
     async def main() -> None:
