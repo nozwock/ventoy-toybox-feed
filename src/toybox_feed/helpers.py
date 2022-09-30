@@ -19,13 +19,16 @@ def add_magnet_links_to_feeds(
             if url is not None:
                 urls.append(url)
 
-    connector = aiohttp.TCPConnector(force_close=True)
+    # WEIRD...can't use connector obj like this now
+    # was able to just a while ago....weird...have to hardcode this in the download fn now
+    # now gives error - RuntimeError: Timeout context manager should be used inside a task
+    # connector = aiohttp.TCPConnector(force_close=True)
     # can't reuse same tcp connections, distrowatch disconnects otherwise.
 
     map = get_filename_and_feeds_relation(feeds)
     with tempfile.TemporaryDirectory() as tmpdir:
         tmpdir = Path(tmpdir)
-        download_many(urls, tmpdir, connector=connector)
+        download_many(urls, tmpdir)
 
         for distro_name in map.keys():
             for fname_index_pair in map[distro_name]:
