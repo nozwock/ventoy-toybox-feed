@@ -1,4 +1,4 @@
-name: Scrape Releases
+name: Scrape
 
 on:
   push:
@@ -6,6 +6,7 @@ on:
       - "main"
   schedule:
     - cron: "0 */24 * * *"
+  workflow_dispatch:
 
 jobs:
   scrape-feeds:
@@ -20,7 +21,7 @@ jobs:
       - run: |
           pip install .
 
-      - name: 🕸️ Run Scraper
+      - name: ️🤖 Run Scraper
         run: |
           python -m toybox_feed.cli -o releases.json
         shell: bash

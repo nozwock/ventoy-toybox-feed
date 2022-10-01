@@ -82,10 +82,7 @@ def download_many(
         connector = aiohttp.TCPConnector(force_close=True)  # HARDCODED
         # NOTE: find a soln for this later
         async with aiohttp.ClientSession(
-            headers=headers,
-            connector=connector,
-            trust_env=True,  # add trust_env for test
-            **kwargs,
+            headers=headers, connector=connector, **kwargs
         ) as session:
             await asyncio.gather(*[fetch_file(session, url) for url in urls])
 
