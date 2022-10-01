@@ -8,6 +8,7 @@ import aiohttp
 import aiolimiter
 import requests
 from rich.logging import RichHandler
+import tenacity
 
 RESPONSE_OK = 200
 USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64)"
@@ -57,6 +58,7 @@ def download_many(
     limiter = aiolimiter.AsyncLimiter(2, 0.125) if limiter is None else limiter
     responses: Responses = []
 
+    @tenacity.retry
     async def fetch_file(
         session: aiohttp.ClientSession,
         url: str,
@@ -66,7 +68,7 @@ def download_many(
         async with limiter:
             logger.info(f"Begin downloading {url}")
             async with session.get(url) as response:
-                logger.info(f"Received response {response.status}")
+                # logger.info(f"Received response {response.status}")
                 responses.append(response.status)
                 if response.status == RESPONSE_OK:
                     f = await aiofiles.open(dir.joinpath(filename), "wb")
