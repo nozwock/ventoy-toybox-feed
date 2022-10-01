@@ -53,8 +53,8 @@ def download_many(
     dir = Path(dir) if isinstance(dir, str) else dir
     dir.mkdir(exist_ok=True, parents=True)
     headers = {"User-Agent": USER_AGENT} if headers is None else headers
-    semaphore = asyncio.Semaphore(5) if semaphore is None else semaphore
-    limiter = aiolimiter.AsyncLimiter(1, 0.125) if limiter is None else limiter
+    semaphore = asyncio.Semaphore(10) if semaphore is None else semaphore
+    limiter = aiolimiter.AsyncLimiter(2, 0.125) if limiter is None else limiter
     responses: Responses = []
 
     async def fetch_file(
