@@ -11,7 +11,7 @@ import aiohttp
 from rich.logging import RichHandler
 
 from toybox_feed.scrapers.distrowatch import TorrentArchiveScraper
-from toybox_feed.utils.dl import download_many
+from toybox_feed.utils.dl import USER_AGENT, download_many
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -46,7 +46,11 @@ def test_async_download() -> None:
     # can't reuse same tcp connections, distrowatch disconnects otherwise.
 
     start_time = timer()
-    download_many(urls, "./test_async_download")
+    download_many(
+        urls,
+        "./test_async_download",
+        headers={"User-Agent": USER_AGENT, "Connection": "close"},
+    )
     logger.info(
         f"[green]{timer() - start_time}s[/green] [yellow]for {len(urls)} urls[/yellow]",
         extra={"markup": True},
