@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - "main"
+    paths-ignore:
+      - '**/**.md'
+      - ".gitignore"
+      - ".justfile"
+      - "**/tests/"
   schedule:
     - cron: "0 */24 * * *"
   workflow_dispatch:
