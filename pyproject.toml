@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ventoy-toybox-feed"
-version = "22.10.26"
+version = "22.10.02"
 description = ""
 authors = [
   "nozwock <57829219+nozwock@users.noreply.github.com>",
