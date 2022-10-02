@@ -19,12 +19,12 @@ aiofiles = "^22.1.0"
 aiohttp = "^3.8.3"
 asyncio = "^3.4.3"
 aiolimiter = "^1.0.0"
-rich = "^12.5.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.8.0"
 yaspin = "^2.2.0"
 isort = "^5.10.1"
+rich = "^12.5.1"
 
 [tool.black]
 # line-length = 79
