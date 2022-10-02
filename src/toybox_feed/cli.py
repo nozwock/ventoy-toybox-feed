@@ -18,7 +18,7 @@ def run() -> None:
 
     with open(Path(args.output), "w") as f:
         start_time = timer()
-        feeds = add_magnet_links_to_feeds(distrowatch.TorrentArchiveScraper().get_feed)
+        feeds = add_magnet_links_to_feeds(distrowatch.TorrentArchiveScraper().feeds)
         json.dump(feeds, f)
         print(f"Done! took {timer() - start_time}s")
 

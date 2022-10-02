@@ -22,7 +22,7 @@ logging.basicConfig(
 
 def test_async_download() -> None:
     logger.info("Begin scraping feeds")
-    feed = TorrentArchiveScraper().get_feed
+    feed = TorrentArchiveScraper().feeds
     logger.info(
         "[bold green]Finished scraping feeds[/bold green]", extra={"markup": True}
     )

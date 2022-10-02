@@ -16,7 +16,7 @@ class TorrentArchiveScraper:
     URL = "https://distrowatch.com/dwres.php?resource=bittorrent&sortorder=date"
 
     def __init__(self) -> None:
-        feed: dict[str, list[TorrentData]] = {}
+        self.__feeds: dict[str, list[TorrentData]] = {}
         """
         This is the parsed data.\n
         { 
@@ -42,21 +42,21 @@ class TorrentArchiveScraper:
             for tag in news_feed.find_all("td", class_="torrentdate")
         ]
         raw_feed: zip[RawDistroData] = zip(
-            [f"{tag.text}".strip() for tag in torrent_data[::2]],
+            [f"{tag.text}".strip() for tag in torrent_data[::2]],  # distro name
             [
                 (
-                    f"{tag.a.text}".strip(),
-                    f"{TorrentArchiveScraper.START_URL}{tag.a['href']}".strip(),
-                    date,
+                    f"{tag.a.text}".strip(),  # filename or name
+                    f"{TorrentArchiveScraper.START_URL}{tag.a['href']}".strip(),  # torrent url
+                    date,  # release date
                 )
                 for tag, date in zip(torrent_data[1::2], release_date)
             ],
         )
 
         for distro_data in raw_feed:
-            if feed.get(distro_data[0]) is None:
-                feed[distro_data[0]] = []
-            feed[distro_data[0]].append(
+            if self.__feeds.get(distro_data[0]) is None:
+                self.__feeds[distro_data[0]] = []
+            self.__feeds[distro_data[0]].append(
                 {
                     "name": distro_data[1][0],
                     "torrent_url": distro_data[1][1],
@@ -64,9 +64,9 @@ class TorrentArchiveScraper:
                 }
             )
 
-        # exposing access to the parsed data
-        self.get_feed = feed
-        """returns parsed data as a dict"""
+    @property
+    def feeds(self) -> dict[str, list[TorrentData]]:
+        return self.__feeds
 
 
 if __name__ == "__main__":
@@ -74,4 +74,4 @@ if __name__ == "__main__":
 
     # NOTE: pipe the script output with something like `less`
     # since the output is going to be lengthy
-    PrettyPrinter().pprint(TorrentArchiveScraper().get_feed)
+    PrettyPrinter().pprint(TorrentArchiveScraper().feeds)

@@ -10,7 +10,7 @@ def get_feeds_with_magnets() -> None:
     # with open("./feeds.json", "r") as f:
     #     feed = json.load(f)
 
-    feed = TorrentArchiveScraper().get_feed
+    feed = TorrentArchiveScraper().feeds
 
     feeds_with_magnets = add_magnet_links_to_feeds(feed)
     with open("feeds_with_magnets.json", "w") as f:
