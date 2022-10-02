@@ -1,8 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 
-# from torrentool.api import Torrent
-
 TorrentData = dict[str, str]
 # {"name": str, "torrent_url": str, "magnet": str, "date": str}
 RawDistroData = tuple[str, tuple]

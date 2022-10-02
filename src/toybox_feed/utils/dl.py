@@ -7,22 +7,14 @@ import aiofiles
 import aiohttp
 import aiolimiter
 import requests
-from rich.logging import RichHandler
+
+logger = logging.getLogger(__name__)
 
 RESPONSE_OK = 200
 USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64)"
 
 Response = int
 Responses = list[int]
-
-
-logger = logging.getLogger(__name__)
-logging.basicConfig(
-    level=logging.INFO,
-    format=f"%(message)s",
-    datefmt="%H:%M:%S",
-    handlers=[RichHandler()],
-)
 
 
 def download(url: str, dir: str | Path = "", **kwargs: Any) -> Response:

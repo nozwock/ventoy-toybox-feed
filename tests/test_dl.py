@@ -1,7 +1,3 @@
-"""
-this is a mess...yaya
-i needed logs inside the function so...
-"""
 import json
 import logging
 from timeit import default_timer as timer

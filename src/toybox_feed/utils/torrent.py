@@ -1,4 +1,3 @@
-import urllib
 from pathlib import Path
 
 from torrentool.api import Torrent
