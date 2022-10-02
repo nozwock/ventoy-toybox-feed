@@ -2,12 +2,10 @@
 this is a mess...yaya
 i needed logs inside the function so...
 """
-# from toybox_feed.utils.dl import download_many
 import json
 import logging
 from timeit import default_timer as timer
 
-import aiohttp
 from rich.logging import RichHandler
 
 from toybox_feed.scrapers.distrowatch import TorrentArchiveScraper

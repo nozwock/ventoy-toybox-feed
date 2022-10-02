@@ -31,8 +31,9 @@ def add_magnet_links_to_feeds(
             tmpdir,
             headers={"User-Agent": USER_AGENT, "Connection": "close"},
             rate=1,
-            period=0.4,
-        )  # turning off HTTP keep-alive...tho didn't I already did that with TCPConnector?
+            period=0.4,  # this rps works fine on ghub actions (distrowatch doesn't get angry T~T)
+        )
+        # turning off HTTP keep-alive...tho didn't I already did that with TCPConnector?
         # hopefully this fixes Connection reset errors
 
         for distro_name in map.keys():

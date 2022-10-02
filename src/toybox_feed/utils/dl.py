@@ -54,10 +54,8 @@ def download_many(
     dir = Path(dir) if isinstance(dir, str) else dir
     dir.mkdir(exist_ok=True, parents=True)
     headers = {"User-Agent": USER_AGENT} if headers is None else headers
-    semaphore = asyncio.BoundedSemaphore(sema_value)  # lower for ghub actions (T~T)
-    limiter = aiolimiter.AsyncLimiter(
-        rate, period
-    )  # limiter doesn't seems to be working...wth?!
+    semaphore = asyncio.BoundedSemaphore(sema_value)
+    limiter = aiolimiter.AsyncLimiter(rate, period)
     responses: Responses = []
 
     async def download_task(
