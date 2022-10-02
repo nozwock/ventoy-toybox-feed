@@ -1,8 +1,6 @@
 import tempfile
 from pathlib import Path
 
-import aiohttp
-
 from toybox_feed.scrapers.distrowatch import TorrentData
 from toybox_feed.utils.dl import USER_AGENT, download_many
 from toybox_feed.utils.torrent import get_magnet_link
@@ -29,7 +27,10 @@ def add_magnet_links_to_feeds(
     with tempfile.TemporaryDirectory() as tmpdir:
         tmpdir = Path(tmpdir)
         download_many(
-            urls, tmpdir, headers={"User-Agent": USER_AGENT, "Connection": "close"}
+            urls,
+            tmpdir,
+            headers={"User-Agent": USER_AGENT, "Connection": "close"},
+            sema_value=2,  # for ghub actions...connection resets for any higher value T~T
         )  # turning off HTTP keep-alive...tho didn't I already did that with TCPConnector?
         # hopefully this fixes Connection reset errors
 
