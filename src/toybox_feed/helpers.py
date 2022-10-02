@@ -30,7 +30,8 @@ def add_magnet_links_to_feeds(
             urls,
             tmpdir,
             headers={"User-Agent": USER_AGENT, "Connection": "close"},
-            sema_value=2,  # for ghub actions...connection resets for any higher value T~T
+            rate=1,
+            period=0.4,
         )  # turning off HTTP keep-alive...tho didn't I already did that with TCPConnector?
         # hopefully this fixes Connection reset errors
 
