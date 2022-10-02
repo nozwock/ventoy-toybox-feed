@@ -5,7 +5,7 @@ on:
     branches:
       - "main"
     paths-ignore:
-      - '**/**.md'
+      - "**/**.md"
       - ".gitignore"
       - ".justfile"
       - "**/tests/"
@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  scrape-feeds:
+  scrape:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -43,7 +43,7 @@ jobs:
         with:
           keep_latest: 0
           delete_tags: true
-      
+
       - name: 🛠️ Generate stats
         id: utils
         run: |
