@@ -45,6 +45,7 @@ def download(url: str, dir: str | Path = "", **kwargs: Any) -> Response:
 def download_many(
     urls: list[str],
     dir: str | Path = "",
+    *,
     headers: dict = None,  # type: ignore
     rate: float = 1,
     period: float = 0.125,
@@ -61,7 +62,7 @@ def download_many(
     async def download_task(
         session: aiohttp.ClientSession,
         url: str,
-    ):
+    ) -> None:
         filename = url.split("/")[-1]
         async with semaphore:
             async with limiter:
@@ -75,7 +76,7 @@ def download_many(
                     else:
                         logger.error(f"Failed to download {url}")
 
-    async def main():
+    async def main() -> None:
         connector = aiohttp.TCPConnector(force_close=True)  # HARDCODED
         # NOTE: find a soln for this later
         async with aiohttp.ClientSession(
