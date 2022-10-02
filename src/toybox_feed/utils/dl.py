@@ -46,18 +46,20 @@ def download_many(
     urls: list[str],
     dir: str | Path = "",
     headers: dict = None,  # type: ignore
-    semaphore: asyncio.Semaphore = None,  # type: ignore
-    limiter: aiolimiter.AsyncLimiter = None,  # type: ignore
+    rate: float = 1,
+    period: float = 0.2,
     **kwargs: Any,
 ) -> Responses:
     dir = Path(dir) if isinstance(dir, str) else dir
     dir.mkdir(exist_ok=True, parents=True)
     headers = {"User-Agent": USER_AGENT} if headers is None else headers
-    semaphore = asyncio.Semaphore(10) if semaphore is None else semaphore
-    limiter = aiolimiter.AsyncLimiter(2, 0.125) if limiter is None else limiter
+    semaphore = asyncio.BoundedSemaphore(10)  # lower for ghub actions (T~T)
+    limiter = aiolimiter.AsyncLimiter(
+        rate, period
+    )  # limiter doesn't seems to be working...wth?!
     responses: Responses = []
 
-    async def fetch_file(
+    async def download_task(
         session: aiohttp.ClientSession,
         url: str,
     ) -> None:
@@ -69,22 +71,20 @@ def download_many(
                 # logger.info(f"Received response {response.status}")
                 responses.append(response.status)
                 if response.status == RESPONSE_OK:
-                    f = await aiofiles.open(dir.joinpath(filename), "wb")
-                    await f.write(await response.read())
-                    logger.info(f"Finished downloading {url}")
-                    await f.close()
+                    async with aiofiles.open(dir.joinpath(filename), "wb") as f:
+                        await f.write(await response.read())
+                        logger.info(f"Finished downloading {url}")
                 else:
                     logger.error(f"Failed to download {url}")
                 semaphore.release()
 
     async def main() -> None:
-        """async file download function."""
         connector = aiohttp.TCPConnector(force_close=True)  # HARDCODED
         # NOTE: find a soln for this later
         async with aiohttp.ClientSession(
             headers=headers, connector=connector, **kwargs
         ) as session:
-            await asyncio.gather(*[fetch_file(session, url) for url in urls])
+            await asyncio.gather(*[download_task(session, url) for url in urls])
 
     asyncio.run(main())
     return responses
