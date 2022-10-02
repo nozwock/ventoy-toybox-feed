@@ -17,15 +17,22 @@ Response = int
 Responses = list[int]
 
 
-def download(url: str, dir: str | Path = "", **kwargs: Any) -> Response:
+def download(
+    url: str,
+    dir: str | Path = "",
+    *,
+    headers: dict = None,  # type: ignore
+    **kwargs: Any,
+) -> Response:
     """
     **kwargs are passed to requests.get()
     """
     dir = Path(dir) if isinstance(dir, str) else dir
     dir.mkdir(exist_ok=True, parents=True)
+    headers = {"User-Agent": USER_AGENT} if headers is None else headers
     filename = url.split("/")[-1]
 
-    response = requests.get(url, **kwargs)
+    response = requests.get(url, headers=headers, **kwargs)
     if response.status_code != RESPONSE_OK:
         return response.status_code
 
@@ -69,11 +76,7 @@ def download_many(
                         logger.error(f"Failed to download {url}")
 
     async def main() -> None:
-        connector = aiohttp.TCPConnector(force_close=True)  # HARDCODED
-        # NOTE: find a soln for this later
-        async with aiohttp.ClientSession(
-            headers=headers, connector=connector, **kwargs
-        ) as session:
+        async with aiohttp.ClientSession(headers=headers, **kwargs) as session:
             await asyncio.gather(*[download_task(session, url) for url in urls])
 
     asyncio.run(main())
