@@ -48,12 +48,13 @@ def download_many(
     headers: dict = None,  # type: ignore
     rate: float = 1,
     period: float = 0.2,
+    sema_value: int = 10,
     **kwargs: Any,
 ) -> Responses:
     dir = Path(dir) if isinstance(dir, str) else dir
     dir.mkdir(exist_ok=True, parents=True)
     headers = {"User-Agent": USER_AGENT} if headers is None else headers
-    semaphore = asyncio.BoundedSemaphore(10)  # lower for ghub actions (T~T)
+    semaphore = asyncio.BoundedSemaphore(sema_value)  # lower for ghub actions (T~T)
     limiter = aiolimiter.AsyncLimiter(
         rate, period
     )  # limiter doesn't seems to be working...wth?!
@@ -64,19 +65,18 @@ def download_many(
         url: str,
     ) -> None:
         filename = url.split("/")[-1]
-        await semaphore.acquire()
-        async with limiter:
-            logger.info(f"Begin downloading {url}")
-            async with session.get(url) as response:
-                # logger.info(f"Received response {response.status}")
-                responses.append(response.status)
-                if response.status == RESPONSE_OK:
-                    async with aiofiles.open(dir.joinpath(filename), "wb") as f:
-                        await f.write(await response.read())
-                        logger.info(f"Finished downloading {url}")
-                else:
-                    logger.error(f"Failed to download {url}")
-                semaphore.release()
+        async with semaphore:
+            async with limiter:
+                logger.info(f"Begin downloading {url}")
+                async with session.get(url) as response:
+                    # logger.info(f"Received response {response.status}")
+                    responses.append(response.status)
+                    if response.status == RESPONSE_OK:
+                        async with aiofiles.open(dir.joinpath(filename), "wb") as f:
+                            await f.write(await response.read())
+                            logger.info(f"Finished downloading {url}")
+                    else:
+                        logger.error(f"Failed to download {url}")
 
     async def main() -> None:
         connector = aiohttp.TCPConnector(force_close=True)  # HARDCODED
