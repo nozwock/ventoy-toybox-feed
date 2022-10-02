@@ -36,7 +36,7 @@ def add_magnet_links_to_feeds(
         # turning off HTTP keep-alive...tho didn't I already did that with TCPConnector?
         # hopefully this fixes Connection reset errors
 
-        for distro_name in map.keys():
+        for distro_name in map:
             for fname_index_pair in map[distro_name]:
                 magnet_link: str | None = get_magnet_link(
                     tmpdir.joinpath(fname_index_pair[0])
@@ -47,7 +47,7 @@ def add_magnet_links_to_feeds(
     # tmpdir = Path("./test_async_download")
     # # download_many(urls, tmpdir)
 
-    # for distro_name in map.keys():
+    # for distro_name in map:
     #     for fname_index_pair in map[distro_name]:
     #         # print(fname_index_pair[0])
     #         # print(tmpdir.joinpath(fname_index_pair[0]))
@@ -67,7 +67,7 @@ def get_filename_and_feeds_relation(
     feeds: dict[str, list[TorrentData]]
 ) -> dict[DistroName, list[FilenameIndexMap]]:
     map: dict[DistroName, list[FilenameIndexMap]] = {}
-    for distro_name in feeds.keys():
+    for distro_name in feeds:
         if map.get(distro_name) is None:
             map[distro_name] = []
         for i, torrent_item in enumerate(feeds.get(distro_name)):  # type: ignore
