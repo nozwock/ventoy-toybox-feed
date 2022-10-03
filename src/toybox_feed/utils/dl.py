@@ -4,14 +4,12 @@ from pathlib import Path
 from typing import Any
 
 import aiofiles
-import aiohttp
 import aiolimiter
-import requests
+import httpx
+
+from toybox_feed.settings import USER_AGENT
 
 logger = logging.getLogger(__name__)
-
-RESPONSE_OK = 200
-USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64)"
 
 Response = int
 Responses = list[int]
@@ -25,15 +23,15 @@ def download(
     **kwargs: Any,
 ) -> Response:
     """
-    **kwargs are passed to requests.get()
+    **kwargs are passed to httpx.get()
     """
     dir = Path(dir) if isinstance(dir, str) else dir
     dir.mkdir(exist_ok=True, parents=True)
     headers = {"User-Agent": USER_AGENT} if headers is None else headers
     filename = url.split("/")[-1]
 
-    response = requests.get(url, headers=headers, **kwargs)
-    if response.status_code != RESPONSE_OK:
+    response = httpx.get(url, follow_redirects=True, headers=headers, **kwargs)
+    if response.status_code != httpx.codes.OK:
         return response.status_code
 
     with open(dir.joinpath(filename), "wb") as f:
@@ -59,25 +57,30 @@ def download_many(
     responses: Responses = []
 
     async def download_task(
-        session: aiohttp.ClientSession,
+        client: httpx.AsyncClient,
         url: str,
     ) -> None:
         filename = url.split("/")[-1]
         async with semaphore:
             async with limiter:
                 logger.info(f"Begin downloading {url}")
-                async with session.get(url) as response:
-                    responses.append(response.status)
-                    if response.status == RESPONSE_OK:
-                        async with aiofiles.open(dir.joinpath(filename), "wb") as f:
-                            await f.write(await response.read())
-                            logger.info(f"Finished downloading {url}")
-                    else:
-                        logger.error(f"Failed to download {url}")
+                response = await client.get(
+                    url,
+                    follow_redirects=True,
+                )
+                responses.append(response.status_code)
+                if response.status_code == httpx.codes.OK:
+                    async with aiofiles.open(dir.joinpath(filename), "wb") as f:
+                        await f.write(response.content)
+                        logger.info(
+                            f"{response.status_code} Finished downloading {url}"
+                        )
+                else:
+                    logger.error(f"{response.status_code} Failed to download {url}")
 
     async def main() -> None:
-        async with aiohttp.ClientSession(headers=headers, **kwargs) as session:
-            await asyncio.gather(*[download_task(session, url) for url in urls])
+        async with httpx.AsyncClient(headers=headers, **kwargs) as client:
+            await asyncio.gather(*[download_task(client, url) for url in urls])
 
     asyncio.run(main())
     return responses

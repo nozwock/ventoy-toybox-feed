@@ -1,5 +1,7 @@
-import requests
+import httpx
 from bs4 import BeautifulSoup
+
+from toybox_feed.settings import USER_AGENT
 
 TorrentData = dict[str, str]
 # {"name": str, "torrent_url": str, "magnet": str, "date": str}
@@ -26,7 +28,11 @@ class TorrentArchiveScraper:
         }
         """
 
-        resp = requests.get(TorrentArchiveScraper.URL)
+        resp = httpx.get(
+            TorrentArchiveScraper.URL,
+            follow_redirects=True,
+            headers={"User-Agent": USER_AGENT},
+        )
         soup = BeautifulSoup(resp.text, "lxml")
         resp.close()
 

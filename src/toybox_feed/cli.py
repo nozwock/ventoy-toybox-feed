@@ -5,8 +5,7 @@ from timeit import default_timer as timer
 
 from toybox_feed.helpers import add_magnet_links_to_feeds
 from toybox_feed.scrapers import distrowatch
-
-DEFAULT_JSON = "feeds.json"
+from toybox_feed.settings import DEFAULT_JSON
 
 
 def run() -> None:

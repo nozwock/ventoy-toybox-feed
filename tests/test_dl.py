@@ -5,7 +5,8 @@ from timeit import default_timer as timer
 from rich.logging import RichHandler
 
 from toybox_feed.scrapers.distrowatch import TorrentArchiveScraper
-from toybox_feed.utils.dl import USER_AGENT, download_many
+from toybox_feed.settings import USER_AGENT
+from toybox_feed.utils.dl import download_many
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -32,12 +33,6 @@ def test_async_download() -> None:
             url = item.get("torrent_url")
             if url is not None:
                 urls.append(url)
-
-    # WEIRD...can't use connector obj like this now
-    # was able to just a while ago....weird...have to hardcode this in the download fn now
-    # now gives error - RuntimeError: Timeout context manager should be used inside a task
-    # connector = aiohttp.TCPConnector(force_close=True)
-    # can't reuse same tcp connections, distrowatch disconnects otherwise.
 
     start_time = timer()
     download_many(
