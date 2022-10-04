@@ -39,6 +39,7 @@ def test_async_download() -> None:
         urls,
         "./test_async_download",
         headers={"User-Agent": USER_AGENT, "Connection": "close"},
+        period=0.4,
     )
     logger.info(
         f"[green]{timer() - start_time}s[/green] [yellow]for {len(urls)} urls[/yellow]",
