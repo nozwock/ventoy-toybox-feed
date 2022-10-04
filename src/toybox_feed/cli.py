@@ -1,11 +1,15 @@
 import json
+import logging
 from argparse import ArgumentParser
 from pathlib import Path
 from timeit import default_timer as timer
 
 from toybox_feed.helpers import add_magnet_links_to_feeds
-from toybox_feed.scrapers import distrowatch
+from toybox_feed.scrapers.distrowatch import TorrentArchiveScraper
 from toybox_feed.settings import DEFAULT_JSON
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 
 def run() -> None:
@@ -17,7 +21,10 @@ def run() -> None:
 
     with open(Path(args.output), "w") as f:
         start_time = timer()
-        feeds = add_magnet_links_to_feeds(distrowatch.TorrentArchiveScraper().feeds)
+        logger.info("Begin scraping feeds")
+        feeds = TorrentArchiveScraper().feeds
+        logger.info("Finished scraping feeds")
+        feeds = add_magnet_links_to_feeds(feeds)
         json.dump(feeds, f)
         print(f"Done! took {timer() - start_time}s")
 
