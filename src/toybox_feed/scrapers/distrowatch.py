@@ -1,6 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 
+from toybox_feed.settings import USER_AGENT
+
 TorrentData = dict[str, str]
 # {"name": str, "torrent_url": str, "magnet": str, "date": str}
 RawDistroData = tuple[str, tuple]
@@ -26,7 +28,11 @@ class TorrentArchiveScraper:
         }
         """
 
-        resp = requests.get(TorrentArchiveScraper.URL)
+        resp = requests.get(
+            TorrentArchiveScraper.URL,
+            headers={"User-Agent": USER_AGENT},
+            timeout=5,
+        )
         soup = BeautifulSoup(resp.text, "lxml")
         resp.close()
 

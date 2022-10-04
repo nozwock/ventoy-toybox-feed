@@ -2,7 +2,8 @@ import tempfile
 from pathlib import Path
 
 from toybox_feed.scrapers.distrowatch import TorrentData
-from toybox_feed.utils.dl import USER_AGENT, download_many
+from toybox_feed.settings import USER_AGENT
+from toybox_feed.utils.dl import download_many
 from toybox_feed.utils.torrent import get_magnet_link
 
 
@@ -16,12 +17,6 @@ def add_magnet_links_to_feeds(
             url = item.get("torrent_url")
             if url is not None:
                 urls.append(url)
-
-    # WEIRD...can't use connector obj like this now
-    # was able to just a while ago....weird...have to hardcode this in the download fn now
-    # now gives error - RuntimeError: Timeout context manager should be used inside a task
-    # connector = aiohttp.TCPConnector(force_close=True)
-    # can't reuse same tcp connections, distrowatch disconnects otherwise.
 
     map = get_filename_and_feeds_relation(feeds)
     with tempfile.TemporaryDirectory() as tmpdir:

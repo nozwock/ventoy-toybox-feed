@@ -8,10 +8,10 @@ import aiohttp
 import aiolimiter
 import requests
 
+from toybox_feed.settings import RESPONSE_OK, USER_AGENT
+
 logger = logging.getLogger(__name__)
 
-RESPONSE_OK = 200
-USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64)"
 
 Response = int
 Responses = list[int]
@@ -32,7 +32,7 @@ def download(
     headers = {"User-Agent": USER_AGENT} if headers is None else headers
     filename = url.split("/")[-1]
 
-    response = requests.get(url, headers=headers, **kwargs)
+    response = requests.get(url, headers=headers, timeout=5, **kwargs)
     if response.status_code != RESPONSE_OK:
         return response.status_code
 
@@ -71,9 +71,9 @@ def download_many(
                     if response.status == RESPONSE_OK:
                         async with aiofiles.open(dir.joinpath(filename), "wb") as f:
                             await f.write(await response.read())
-                            logger.info(f"Finished downloading {url}")
+                            logger.info(f"{response.status} Finished downloading {url}")
                     else:
-                        logger.error(f"Failed to download {url}")
+                        logger.error(f"{response.status} Failed to download {url}")
 
     async def main() -> None:
         async with aiohttp.ClientSession(headers=headers, **kwargs) as session:
