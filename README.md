@@ -6,6 +6,12 @@
     This is the scraper component of the Ventoy Toybox application which is responsible for generating the required feeds for it
 </p>
 
+<div align="center">
+
+[![Scrape](https://github.com/nozwock/ventoy-toybox-feed/actions/workflows/ci.yml/badge.svg)](https://github.com/nozwock/ventoy-toybox-feed/actions/workflows/ci.yml)
+
+</div>
+
 ## Links
 
 - JSON:
@@ -16,8 +22,9 @@ https://github.com/nozwock/ventoy-toybox-feed/releases/download/feeds/releases.j
 
 ## Details
 
-* Info such as Linux-distros torrent details are scraped from `distrowatch.com` currently.<br>
-For e.g. this is how the scraped data is structured in a JSON format:-
+- Info such as Linux-distros torrent details are scraped from `distrowatch.com` currently.<br>
+  For e.g. this is how the scraped data is structured in a JSON format:-
+
 ```json
 {
     ...
