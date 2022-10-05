@@ -1,7 +1,7 @@
 import tempfile
 from pathlib import Path
 
-from toybox_feed.scrapers.distrowatch import TorrentData
+from toybox_feed.scrapers.distrowatch import FeedsItem, TorrentData
 from toybox_feed.settings import USER_AGENT
 from toybox_feed.utils.dl import download_many
 from toybox_feed.utils.torrent import get_magnet_link
@@ -14,7 +14,7 @@ def add_magnet_links_to_feeds(
     urls = []
     for torrent_items in feeds.values():
         for item in torrent_items:
-            url = item.get("torrent_url")
+            url = item.get(FeedsItem.torrent_url)
             if url is not None:
                 urls.append(url)
 
@@ -36,7 +36,7 @@ def add_magnet_links_to_feeds(
                 magnet_link: str | None = get_magnet_link(
                     tmpdir.joinpath(fname_index_pair[0])
                 )
-                feeds[distro_name][fname_index_pair[1]]["magnet"] = magnet_link  # type: ignore
+                feeds[distro_name][fname_index_pair[1]][FeedsItem.magnet] = magnet_link  # type: ignore
 
     # OFFLINE DEBUGGING (to not stress the website)
     # tmpdir = Path("./test_async_download")
@@ -66,8 +66,8 @@ def get_filename_and_feeds_relation(
         if map.get(distro_name) is None:
             map[distro_name] = []
         for i, torrent_item in enumerate(feeds.get(distro_name)):  # type: ignore
-            if torrent_item.get("torrent_url") is None:
+            if torrent_item.get(FeedsItem.torrent_url) is None:
                 raise ValueError("wth happened?")
-            torrent_filename: str = torrent_item.get("torrent_url").split("/")[-1]  # type: ignore
+            torrent_filename: str = torrent_item.get(FeedsItem.torrent_url).split("/")[-1]  # type: ignore
             map[distro_name].append((torrent_filename, i))
     return map

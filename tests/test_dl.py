@@ -4,7 +4,7 @@ from timeit import default_timer as timer
 
 from rich.logging import RichHandler
 
-from toybox_feed.scrapers.distrowatch import TorrentArchiveScraper
+from toybox_feed.scrapers.distrowatch import FeedsItem, TorrentArchiveScraper
 from toybox_feed.settings import USER_AGENT
 from toybox_feed.utils.dl import download_many
 
@@ -30,7 +30,7 @@ def test_async_download() -> None:
     urls = []
     for torrent_items in feed.values():
         for item in torrent_items:
-            url = item.get("torrent_url")
+            url = item.get(FeedsItem.torrent_url)
             if url is not None:
                 urls.append(url)
 

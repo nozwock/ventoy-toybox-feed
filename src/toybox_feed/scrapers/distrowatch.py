@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -7,6 +9,15 @@ TorrentData = dict[str, str]
 # {"name": str, "torrent_url": str, "magnet": str, "date": str}
 RawDistroData = tuple[str, tuple]
 # (DistroName, RawTorrentData)
+
+
+@dataclass(frozen=True)
+class FeedsItem:
+    id = "id"
+    name = "name"
+    torrent_url = "torrent_url"
+    magnet = "magnet"
+    date = "date"
 
 
 class TorrentArchiveScraper:
@@ -62,9 +73,9 @@ class TorrentArchiveScraper:
                 self.__feeds[distro_data[0]] = []
             self.__feeds[distro_data[0]].append(
                 {
-                    "name": distro_data[1][0],
-                    "torrent_url": distro_data[1][1],
-                    "date": distro_data[1][2],
+                    FeedsItem.name: distro_data[1][0],
+                    FeedsItem.torrent_url: distro_data[1][1],
+                    FeedsItem.date: distro_data[1][2],
                 }
             )
 
