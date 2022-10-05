@@ -58,7 +58,7 @@ jobs:
         with:
           tag_name: feeds
           name: ${{ steps.utils.outputs.date }}
-          body: Number of unique distros/OS - ${{ steps.utils.outputs.releases }}
+          body: Number of releases - ${{ steps.utils.outputs.releases }}
           files: |
             ${{ github.workspace }}/releases.json
           draft: false
