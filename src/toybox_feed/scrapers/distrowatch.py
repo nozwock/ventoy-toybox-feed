@@ -1,12 +1,23 @@
+from dataclasses import dataclass
+
 import requests
 from bs4 import BeautifulSoup
 
 from toybox_feed.settings import USER_AGENT
 
-TorrentData = dict[str, str]
-# {"name": str, "torrent_url": str, "magnet": str, "date": str}
-RawDistroData = tuple[str, tuple]
-# (DistroName, RawTorrentData)
+FeedsItem = dict[str, str]
+# {"group": str, "name": str, "torrent_url": str, "magnet": str, "date": str}
+RawFeedsItem = tuple[str, tuple]
+# (group, (name, torrent_url, date))
+
+
+@dataclass(frozen=True)
+class FeedsConf:
+    group = "group"
+    name = "name"
+    torrent_url = "torrent_url"
+    magnet = "magnet"
+    date = "date"
 
 
 class TorrentArchiveScraper:
@@ -16,16 +27,19 @@ class TorrentArchiveScraper:
     URL = "https://distrowatch.com/dwres.php?resource=bittorrent&sortorder=date"
 
     def __init__(self) -> None:
-        self.__feeds: dict[str, list[TorrentData]] = {}
+        self.__feeds: list[FeedsItem] = []
         """
-        This is the parsed data.\n
-        { 
-            "DistroName": [
-                {"name": str, "torrent_url": str, "magnet": str, "date": str},
-                ...
-                ],
+        This is the structure of parsed data.\n
+        [ 
+            {
+                "group": str,
+                "name": str,
+                "torrent_url": str,
+                "date": str
+                "magnet": str,
+            },
             ...
-        }
+        ]
         """
 
         resp = requests.get(
@@ -36,40 +50,39 @@ class TorrentArchiveScraper:
         soup = BeautifulSoup(resp.text, "lxml")
         resp.close()
 
-        news_feed = soup.find("td", class_="News1").blockquote  # type: ignore
-        if news_feed is None:
+        td_blockquote = soup.find("td", class_="News1").blockquote  # type: ignore
+        if td_blockquote is None:
             raise
 
-        torrent_data = news_feed.find_all("td", class_="torrent")
-        release_date = [
+        torrent_data = td_blockquote.find_all("td", class_="torrent")
+        release_dates = [
             f"{tag.text}".strip()
-            for tag in news_feed.find_all("td", class_="torrentdate")
+            for tag in td_blockquote.find_all("td", class_="torrentdate")
         ]
-        raw_feed: zip[RawDistroData] = zip(
-            [f"{tag.text}".strip() for tag in torrent_data[::2]],  # distro name
+        raw_feeds: zip[RawFeedsItem] = zip(
+            [f"{tag.text}".strip() for tag in torrent_data[::2]],  # distro/group name
             [
                 (
                     f"{tag.a.text}".strip(),  # filename or name
                     f"{TorrentArchiveScraper.START_URL}{tag.a['href']}".strip(),  # torrent url
                     date,  # release date
                 )
-                for tag, date in zip(torrent_data[1::2], release_date)
+                for tag, date in zip(torrent_data[1::2], release_dates)
             ],
         )
 
-        for distro_data in raw_feed:
-            if self.__feeds.get(distro_data[0]) is None:
-                self.__feeds[distro_data[0]] = []
-            self.__feeds[distro_data[0]].append(
+        for feeds_item in raw_feeds:
+            self.__feeds.append(
                 {
-                    "name": distro_data[1][0],
-                    "torrent_url": distro_data[1][1],
-                    "date": distro_data[1][2],
+                    FeedsConf.group: feeds_item[0],
+                    FeedsConf.name: feeds_item[1][0],
+                    FeedsConf.torrent_url: feeds_item[1][1],
+                    FeedsConf.date: feeds_item[1][2],
                 }
             )
 
     @property
-    def feeds(self) -> dict[str, list[TorrentData]]:
+    def feeds(self) -> list[FeedsItem]:
         return self.__feeds
 
 

@@ -14,7 +14,7 @@
 
 ## Links
 
-- JSON:
+-   JSON:
 
 ```
 https://github.com/nozwock/ventoy-toybox-feed/releases/download/feeds/releases.json
@@ -22,27 +22,25 @@ https://github.com/nozwock/ventoy-toybox-feed/releases/download/feeds/releases.j
 
 ## Details
 
-- Info such as Linux-distros torrent details are scraped from `distrowatch.com` currently.<br>
-  For e.g. this is how the scraped data is structured in a JSON format:-
+-   Data such as Linux-distros torrent details are scraped from `distrowatch.com` currently.<br>
+    Structure of parsed JSON:-
 
 ```json
-{
+[
+    {
+        "group": "KDE neon",
+        "name": "neon-user-20220908-0946.iso.torrent",
+        "torrent_url": "https://www.distrowatch.com/dwres/torrents/neon-user-20220908-0946.iso.torrent",
+        "date": "2022-09-08",
+        "magnet": "magnet:?xt=urn:btih:0354be1c567ff84067ad2cfaacdf911583a6b9e8&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&ws=https%3A%2F%2Ffiles.kde.org%2Fneon%2Fimages%2Fuser%2F20220908-0946%2Fneon-user-20220908-0946.iso"
+    },
+    {
+        "group": "Raspberry Pi OS",
+        "name": "raspios-2022-09-06-raspios-bullseye-armhf.img.xz.torrent",
+        "torrent_url": "https://www.distrowatch.com/dwres/torrents/raspios-2022-09-06-raspios-bullseye-armhf.img.xz.torrent",
+        "date": "2022-09-07",
+        "magnet": "magnet:?xt=urn:btih:02535d5bbb346e201fa120d0c1411f0e591b5291&tr=http%3A%2F%2Ftracker.raspberrypi.org%3A6969%2Fannounce"
+    },
     ...
-    "Debian": [
-        {
-            "name": "debian-11.4.0-amd64-DVD-1.iso.torrent",
-            "torrent_url": "https://www.distrowatch.com/dwres/torrents/debian-11.4.0-amd64-DVD-1.iso.torrent",
-            "date": "2022-07-09",
-            "magnet": "magnet:?xt=urn:btih:7949ef20a89feb1a2838e5b1ef42676a2ae602cc&tr=http%3A%2F%2Fbttracker.debian.org%3A6969%2Fannounce"
-        },
-        {
-            "name": "debian-live-11.2.0-amd64-kde.iso.torrent",
-            "torrent_url": "https://www.distrowatch.com/dwres/torrents/debian-live-11.2.0-amd64-kde.iso.torrent",
-            "date": "2021-12-26",
-            "magnet": "magnet:?xt=urn:btih:9e1ce66d25276fc04e0e0ed7eef2cb671d0773af&tr=http%3A%2F%2Fbttracker.debian.org%3A6969%2Fannounce"
-        },
-        ...
-    ],
-    ...
-}
+]
 ```

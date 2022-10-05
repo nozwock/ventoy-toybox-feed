@@ -5,9 +5,9 @@ from toybox_feed.scrapers.distrowatch import TorrentArchiveScraper
 
 
 def get_feeds_with_magnets() -> None:
-    feed = TorrentArchiveScraper().feeds
+    feeds = TorrentArchiveScraper().feeds
 
-    feeds_with_magnets = add_magnet_links_to_feeds(feed)
+    feeds_with_magnets = add_magnet_links_to_feeds(feeds)
     with open("feeds_with_magnets.json", "w") as f:
         json.dump(feeds_with_magnets, f)
 
