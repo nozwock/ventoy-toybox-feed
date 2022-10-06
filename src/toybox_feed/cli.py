@@ -4,7 +4,7 @@ from argparse import ArgumentParser
 from pathlib import Path
 from timeit import default_timer as timer
 
-from toybox_feed.helpers import add_magnet_links_to_feeds
+from toybox_feed.helpers import add_magnet_links_to_feeds, feeds_asdict
 from toybox_feed.scrapers.distrowatch import TorrentArchiveScraper
 from toybox_feed.settings import DEFAULT_JSON
 
@@ -25,7 +25,7 @@ def run() -> None:
         feeds = TorrentArchiveScraper().feeds
         logger.info("Finished scraping feeds")
         feeds = add_magnet_links_to_feeds(feeds)
-        json.dump(feeds, f)
+        json.dump(feeds_asdict(feeds), f)
         print(f"Done! took {timer() - start_time}s")
 
 

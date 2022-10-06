@@ -5,19 +5,14 @@ from bs4 import BeautifulSoup
 
 from toybox_feed.settings import USER_AGENT
 
-FeedsItem = dict[str, str]
-# {"group": str, "name": str, "torrent_url": str, "magnet": str, "date": str}
-RawFeedsItem = tuple[str, tuple]
-# (group, (name, torrent_url, date))
 
-
-@dataclass(frozen=True)
-class FeedsConf:
-    group = "group"
-    name = "name"
-    torrent_url = "torrent_url"
-    magnet = "magnet"
-    date = "date"
+@dataclass
+class FeedsItem:
+    group: str | None = None
+    name: str | None = None
+    torrent_url: str | None = None
+    magnet: str | None = None
+    date: str | None = None
 
 
 class TorrentArchiveScraper:
@@ -35,8 +30,8 @@ class TorrentArchiveScraper:
                 "group": str,
                 "name": str,
                 "torrent_url": str,
-                "date": str
                 "magnet": str,
+                "date": str
             },
             ...
         ]
@@ -55,30 +50,25 @@ class TorrentArchiveScraper:
             raise
 
         torrent_data = td_blockquote.find_all("td", class_="torrent")
-        release_dates = [
+        date_fields = [
             f"{tag.text}".strip()
             for tag in td_blockquote.find_all("td", class_="torrentdate")
         ]
-        raw_feeds: zip[RawFeedsItem] = zip(
-            [f"{tag.text}".strip() for tag in torrent_data[::2]],  # distro/group name
-            [
-                (
-                    f"{tag.a.text}".strip(),  # filename or name
-                    f"{TorrentArchiveScraper.START_URL}{tag.a['href']}".strip(),  # torrent url
-                    date,  # release date
-                )
-                for tag, date in zip(torrent_data[1::2], release_dates)
-            ],
+
+        group_fields = map(lambda t: f"{t.text}".strip(), torrent_data[::2])
+        name_fields, torrent_url_fields = (
+            map(lambda t: f"{t.a.text}".strip(), torrent_data[1::2]),
+            map(
+                lambda t: f"{TorrentArchiveScraper.START_URL}{t.a['href']}".strip(),
+                torrent_data[1::2],
+            ),
         )
 
-        for feeds_item in raw_feeds:
+        for group, name, torrent_url, date in zip(
+            group_fields, name_fields, torrent_url_fields, date_fields
+        ):
             self.__feeds.append(
-                {
-                    FeedsConf.group: feeds_item[0],
-                    FeedsConf.name: feeds_item[1][0],
-                    FeedsConf.torrent_url: feeds_item[1][1],
-                    FeedsConf.date: feeds_item[1][2],
-                }
+                FeedsItem(group=group, name=name, torrent_url=torrent_url, date=date)
             )
 
     @property
@@ -89,6 +79,8 @@ class TorrentArchiveScraper:
 if __name__ == "__main__":
     from pprint import PrettyPrinter
 
+    from toybox_feed import helpers
+
     # NOTE: pipe the script output with something like `less`
     # since the output is going to be lengthy
-    PrettyPrinter().pprint(TorrentArchiveScraper().feeds)
+    PrettyPrinter().pprint(helpers.feeds_asdict(TorrentArchiveScraper().feeds))
