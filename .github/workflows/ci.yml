@@ -48,17 +48,19 @@ jobs:
         id: utils
         run: |
           # Date
-          echo "::set-output name=date::$(date -u "+%Y%m%d")"
+          echo "date=$(date -u "+%Y%m%d")" >> $GITHUB_ENV
+          # echo "::set-output name=date::$(date -u "+%Y%m%d")"
           # Number of releases
-          echo "::set-output name=releases::$(jq length "${{ github.workspace }}/releases.json")"
+          echo "releases=$(jq length "${{ github.workspace }}/releases.json")" >> $GITHUB_ENV
+          # echo "::set-output name=releases::$(jq length "${{ github.workspace }}/releases.json")"
         shell: bash
 
       - name: 🚀️ Upload Releases
         uses: softprops/action-gh-release@v1
         with:
           tag_name: feeds
-          name: ${{ steps.utils.outputs.date }}
-          body: Number of releases - ${{ steps.utils.outputs.releases }}
+          name: ${{ env.date }}
+          body: Number of releases - ${{ env.releases }}
           files: |
             ${{ github.workspace }}/releases.json
           draft: false

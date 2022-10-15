@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from toybox_feed.settings import USER_AGENT
 
 
-@dataclass
+@dataclass(kw_only=True)
 class FeedsItem:
     group: str | None = None
     name: str | None = None
