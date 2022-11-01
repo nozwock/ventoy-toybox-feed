@@ -30,8 +30,6 @@ def add_magnet_links_to_feeds(feeds: list[FeedsItem]) -> list[FeedsItem]:
             rate=1,
             period=0.4,  # this rps works fine on ghub actions (distrowatch doesn't get angry T~T)
         )
-        # turning off HTTP keep-alive...tho didn't I already did that with TCPConnector?
-        # hopefully this fixes Connection reset errors
 
         for name_index_map in maps:
             magnet_link: str | None = get_magnet_link(
@@ -39,14 +37,14 @@ def add_magnet_links_to_feeds(feeds: list[FeedsItem]) -> list[FeedsItem]:
             )
             feeds[name_index_map[1]].magnet = magnet_link
 
-    ###############################################
+    ################################################### IGNORE
     # for OFFLINE DEBUGGING (to not stress the website)
     # tmpdir = Path("./test_async_download")
 
     # for name_index_map in maps:
     #     magnet_link: str | None = get_magnet_link(tmpdir.joinpath(name_index_map[0]))
     #     feeds[name_index_map[1]].magnet = magnet_link
-    ###############################################
+    ###################################################
 
     return feeds
 
