@@ -42,6 +42,9 @@ class TorrentArchiveScraper:
             headers={"User-Agent": USER_AGENT},
             timeout=5,
         )
+        if not resp.ok:
+            resp.close()
+            resp.raise_for_status()
         soup = BeautifulSoup(resp.text, "lxml")
         resp.close()
 
