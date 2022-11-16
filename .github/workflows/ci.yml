@@ -10,7 +10,7 @@ on:
       - ".justfile"
       - "**/tests/"
   schedule:
-    - cron: "0 */24 * * *"
+    - cron: "0 0 */2 * *"
   workflow_dispatch:
 
 jobs:
