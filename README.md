@@ -15,7 +15,7 @@
 
 ## Details
 
-- Github's Action cronjob will run the script and upload the feeds to the [Releases] once a day.
+- Github's Action cronjob will run the script and upload the feeds to the [Releases] once every 2 days.
 - In case distrowatch.com goes down or scraping fails, check out last working feeds at [Releases].
 
 
